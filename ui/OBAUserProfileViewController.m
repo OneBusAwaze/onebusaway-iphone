@@ -7,10 +7,12 @@
 //
 
 #import "OBAUserProfileViewController.h"
+#import "OBASettingsViewController.h"
 
 
 @interface OBAUserProfileViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource>
 @property (weak, nonatomic) IBOutlet UIImageView *userPicture;
+@property (weak, nonatomic) IBOutlet UIButton *cameraButton;
 @property (weak, nonatomic) IBOutlet UILabel *userName;
 @property (weak, nonatomic) IBOutlet UILabel *userPoints;
 @property (weak, nonatomic) IBOutlet UIView *profileBox;
@@ -63,6 +65,8 @@
   self.userPicture.contentMode = UIViewContentModeScaleAspectFill;
   self.userPicture.image = [UIImage imageNamed:@"juju.jpg"];
   
+    [self.cameraButton addTarget:self action:@selector(cameraButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    
   self.userName.text = @"Jack Spade"; //replace with username
   
   //THIS WILL BE DELETED AND REPLACED WITH COLLECTION VIEW
@@ -72,11 +76,18 @@
   self.picture2.layer.cornerRadius = 25;
   self.picture2.layer.masksToBounds = true;
   
-  
-  //Camera button
-  UIBarButtonItem *cameraButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(cameraButtonPressed)];
-  self.navigationItem.rightBarButtonItem = cameraButton;
+//settings button
+    UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"settings"] style:UIBarButtonItemStylePlain target:self action:@selector(settingsButtonPressed)];
+  self.navigationItem.rightBarButtonItem = settingsButton;
 }
+
+//settings button pressed
+-(void)settingsButtonPressed {
+    OBASettingsViewController *vc = [[OBASettingsViewController alloc] init];
+    
+    [self.navigationController pushViewController:vc animated:true];
+}
+
 
 //Camera Button Pressed
 -(void)cameraButtonPressed {
