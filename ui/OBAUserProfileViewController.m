@@ -59,7 +59,7 @@
     self.userPicture.layer.cornerRadius = 50;
     self.userPicture.layer.masksToBounds = true;
     self.userPicture.layer.borderColor = [[UIColor whiteColor] CGColor];
-    self.userPicture.backgroundColor = [UIColor whiteColor];
+    self.userPicture.backgroundColor = [UIColor lightGrayColor];
     self.userPicture.layer.borderWidth = 4;
     self.userPicture.contentMode = UIViewContentModeScaleAspectFill;
 
@@ -78,11 +78,7 @@
                     UIImage *picture = [UIImage imageWithData:data];
 
                     if (picture) {
-                        
                         self.userPicture.image = picture;
-                    }
-                    else {
-//                        self.userPicture.image = //camera
                     }
                 });
             }
@@ -145,6 +141,7 @@
   
   UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
   self.userPicture.image = chosenImage;
+    self.cameraButton.imageView.image = nil;
   
   //Save selected image locally
   NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
