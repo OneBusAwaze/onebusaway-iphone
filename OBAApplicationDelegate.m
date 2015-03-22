@@ -194,9 +194,7 @@ static NSString *kOBAShowSurveyAlertKey = @"OBASurveyAlertDefaultsKey";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
-    // Initialize Parse.
-    [Parse setApplicationId:@"fJs3oUmiiROLCIwRUdR0zpO9YnmGJ8P5frsYStku"
-                  clientKey:@"dOL2jSGirOvFHFwS84oJ9BCPhdN0pma8LG9GdPBj"];
+    [self initializeParse];
 
     //Register alert defaults
     NSDictionary *alertDefaults = @{kOBAShowSurveyAlertKey: @(YES)};
@@ -222,6 +220,14 @@ static NSString *kOBAShowSurveyAlertKey = @"OBASurveyAlertDefaultsKey";
     [self _constructUI];
 
     return YES;
+}
+
+- (void)initializeParse {
+    // Initialize Parse.
+    [Parse setApplicationId:@"fJs3oUmiiROLCIwRUdR0zpO9YnmGJ8P5frsYStku"
+                  clientKey:@"dOL2jSGirOvFHFwS84oJ9BCPhdN0pma8LG9GdPBj"];
+
+    [PFTwitterUtils initializeWithConsumerKey:@"q2dKhWpwuSl6EyhUY5Qc9kLbE" consumerSecret:@"3NQcxyrHTRraydPtvvCEqIqrpfOi62JT3QkcVQ2kkRJloWzkxF"];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
