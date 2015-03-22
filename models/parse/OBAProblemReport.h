@@ -23,6 +23,7 @@ typedef NS_ENUM(NSInteger, OBAProblemReportType) {
 @property(nonatomic,strong) PFGeoPoint *location;
 @property(nonatomic,strong) NSString *comments;
 @property(nonatomic,assign) OBAProblemReportType problemReportType;
+@property(nonatomic,strong) PFUser *reportedBy;
 
 + (NSString*)stringFromProblemReportType:(OBAProblemReportType)problemReportType;
 @end

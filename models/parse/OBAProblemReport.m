@@ -14,6 +14,7 @@
 @dynamic reportType;
 @dynamic location;
 @dynamic comments;
+@dynamic reportedBy;
 
 #pragma mark - Public Class Methods
 
