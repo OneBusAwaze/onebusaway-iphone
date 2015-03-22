@@ -8,10 +8,10 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OBAUserProfileViewController">
             <connections>
                 <outlet property="badgeCollectionView" destination="u18-na-UYc" id="5si-jo-aQi"/>
+                <outlet property="cameraButton" destination="aqI-jz-GWa" id="Dq2-Yd-XgP"/>
                 <outlet property="picture1" destination="dnh-Yv-agd" id="dMi-Eh-11r"/>
                 <outlet property="picture2" destination="iFv-0Q-Dwb" id="Yup-rM-rFO"/>
                 <outlet property="profileBox" destination="Tc0-Ty-KST" id="tF1-RV-eqH"/>
-                <outlet property="userActivity" destination="Et6-CO-0a6" id="JwI-Ax-Bqz"/>
                 <outlet property="userName" destination="8X0-yE-okz" id="vdO-Hq-Mxd"/>
                 <outlet property="userPicture" destination="Q2p-cC-fqH" id="x2o-4C-xDh"/>
                 <outlet property="userPoints" destination="BOr-zj-Brq" id="Fd7-Ac-2vo"/>
@@ -26,10 +26,6 @@
                 <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tc0-Ty-KST">
                     <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="0.5" colorSpace="calibratedRGB"/>
                 </view>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Et6-CO-0a6">
-                    <rect key="frame" x="0.0" y="403" width="611" height="197"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                </tableView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8X0-yE-okz">
                     <rect key="frame" x="152" y="90" width="310" height="21"/>
                     <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="17"/>
@@ -51,10 +47,10 @@
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="badge-25" translatesAutoresizingMaskIntoConstraints="NO" id="Axd-WS-E6B">
                     <rect key="frame" x="92" y="232" width="50" height="50"/>
                 </imageView>
-                <imageView userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="badge-100" translatesAutoresizingMaskIntoConstraints="NO" id="Ksb-2C-WI2">
+                <imageView userInteractionEnabled="NO" alpha="0.30000000000000004" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="badge-100" translatesAutoresizingMaskIntoConstraints="NO" id="Ksb-2C-WI2">
                     <rect key="frame" x="157" y="232" width="50" height="50"/>
                 </imageView>
-                <imageView userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="badge-250" translatesAutoresizingMaskIntoConstraints="NO" id="5h1-uB-l6y">
+                <imageView userInteractionEnabled="NO" alpha="0.30000000000000004" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="badge-250" translatesAutoresizingMaskIntoConstraints="NO" id="5h1-uB-l6y">
                     <rect key="frame" x="223" y="232" width="50" height="50"/>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Badges Earned" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="THj-4e-Yec">
@@ -75,6 +71,13 @@
                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="cipp" translatesAutoresizingMaskIntoConstraints="NO" id="iFv-0Q-Dwb">
                     <rect key="frame" x="92" y="329" width="50" height="50"/>
                 </imageView>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aqI-jz-GWa">
+                    <rect key="frame" x="25" y="83" width="100" height="100"/>
+                    <state key="normal" title="cameraButton">
+                        <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
             </subviews>
             <color key="backgroundColor" white="0.75" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>

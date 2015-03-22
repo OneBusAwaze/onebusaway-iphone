@@ -27,8 +27,10 @@
 @class OBARecentStopsViewController;
 @class OBABookmarksViewController;
 @class OBAInfoViewController;
+@class OBAUserProfileViewController;
 @class OBAStopIconFactory;
 @class OBARegionListViewController;
+
 
 @interface OBAApplicationDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate> {
     
@@ -59,6 +61,8 @@
 @property(strong) UINavigationController *infoNavigationController;
 @property(strong) OBAInfoViewController *infoViewController;
 
+@property(strong) UINavigationController *userProfileNavigationController;
+@property(strong) OBAUserProfileViewController *userProfileViewController;
 
 @property(nonatomic,readonly) OBAReferencesV2 * references;
 @property(nonatomic,readonly) OBAModelDAO * modelDao;

@@ -11,6 +11,7 @@
 
 @interface OBAUserProfileViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource>
 @property (weak, nonatomic) IBOutlet UIImageView *userPicture;
+@property (weak, nonatomic) IBOutlet UIButton *cameraButton;
 @property (weak, nonatomic) IBOutlet UILabel *userName;
 @property (weak, nonatomic) IBOutlet UILabel *userPoints;
 @property (weak, nonatomic) IBOutlet UIView *profileBox;
@@ -21,6 +22,15 @@
 @end
 
 @implementation OBAUserProfileViewController
+
+- (id)init {
+    self = [super initWithNibName:@"OBAUserProfileViewController" bundle:nil];
+    if (self) {
+        self.title = NSLocalizedString(@"Profile", @"");
+        self.tabBarItem.image = [UIImage imageNamed:@"profile"];
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -82,6 +92,14 @@
     UIBarButtonItem *cameraButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(cameraButtonPressed)];
     self.navigationItem.rightBarButtonItem = cameraButton;
 }
+
+//settings button pressed
+-(void)settingsButtonPressed {
+    OBASettingsViewController *vc = [[OBASettingsViewController alloc] init];
+    
+    [self.navigationController pushViewController:vc animated:true];
+}
+
 
 //Camera Button Pressed
 -(void)cameraButtonPressed {
