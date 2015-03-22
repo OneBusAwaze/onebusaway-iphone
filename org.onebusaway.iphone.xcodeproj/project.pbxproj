@@ -203,6 +203,9 @@
 		93F153001A9AE9740015C141 /* OBAURLHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F152FF1A9AE9740015C141 /* OBAURLHelpers.m */; };
 		93F153021A9AEA500015C141 /* OBAURLHelpers_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F153011A9AEA500015C141 /* OBAURLHelpers_Tests.m */; };
 		96ADB3DF17BDD5DA00314D65 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 96ADB3DE17BDD5DA00314D65 /* libz.dylib */; };
+		B540B7FB1ABF413100A6BEEA /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B540B7FA1ABF413100A6BEEA /* ParseUI.framework */; };
+		B540B7FD1ABF487100A6BEEA /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B540B7FC1ABF487100A6BEEA /* Accounts.framework */; };
+		B540B7FF1ABF487D00A6BEEA /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B540B7FE1ABF487D00A6BEEA /* Social.framework */; };
 		D61AC67C0F77E0F7006FA853 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D61AC67B0F77E0F7006FA853 /* CoreLocation.framework */; };
 		D61E4E4F0FC2000D000C1782 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D61E4E4E0FC2000D000C1782 /* MapKit.framework */; };
 		D62255AB0F8BCA8F00F139BA /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D62255AA0F8BCA8F00F139BA /* libsqlite3.0.dylib */; };
@@ -578,6 +581,9 @@
 		B52BC5581AAD72E900ED319E /* GAIEcommerceProduct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIEcommerceProduct.h; sourceTree = "<group>"; };
 		B52BC5591AAD72E900ED319E /* GAIEcommerceProductAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIEcommerceProductAction.h; sourceTree = "<group>"; };
 		B52BC55A1AAD72E900ED319E /* GAIEcommercePromotion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIEcommercePromotion.h; sourceTree = "<group>"; };
+		B540B7FA1ABF413100A6BEEA /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseUI.framework; sourceTree = "<group>"; };
+		B540B7FC1ABF487100A6BEEA /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
+		B540B7FE1ABF487D00A6BEEA /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		D6169A160FC228FB00631BCE /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		D61AC67B0F77E0F7006FA853 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		D61E4E4E0FC2000D000C1782 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -601,12 +607,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B540B7FF1ABF487D00A6BEEA /* Social.framework in Frameworks */,
+				B540B7FD1ABF487100A6BEEA /* Accounts.framework in Frameworks */,
 				D6631B34104DC1BB001C7C90 /* SystemConfiguration.framework in Frameworks */,
 				9342B4301ABE64F000A4C366 /* StoreKit.framework in Frameworks */,
 				9342B42E1ABE64E700A4C366 /* Security.framework in Frameworks */,
 				9342B42C1ABE64C500A4C366 /* MobileCoreServices.framework in Frameworks */,
 				288765080DF74369002DB57D /* CoreGraphics.framework in Frameworks */,
 				9342B42A1ABE649800A4C366 /* CFNetwork.framework in Frameworks */,
+				B540B7FB1ABF413100A6BEEA /* ParseUI.framework in Frameworks */,
 				9342B4281ABE649000A4C366 /* AudioToolbox.framework in Frameworks */,
 				9342B4261ABE646700A4C366 /* ParseUI.framework in Frameworks */,
 				9388E9DB1A9BB6EA00C9F6CE /* CoreData.framework in Frameworks */,
@@ -716,6 +725,9 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B540B7FE1ABF487D00A6BEEA /* Social.framework */,
+				B540B7FC1ABF487100A6BEEA /* Accounts.framework */,
+				B540B7FA1ABF413100A6BEEA /* ParseUI.framework */,
 				9342B42F1ABE64F000A4C366 /* StoreKit.framework */,
 				9342B42D1ABE64E700A4C366 /* Security.framework */,
 				9342B42B1ABE64C500A4C366 /* MobileCoreServices.framework */,
@@ -1717,6 +1729,7 @@
 					"$(inherited)",
 					"$(SRCROOT)",
 					"$(PROJECT_DIR)/Libraries/Parse",
+					"$(PROJECT_DIR)",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1781,6 +1794,7 @@
 					"$(inherited)",
 					"$(SRCROOT)",
 					"$(PROJECT_DIR)/Libraries/Parse",
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = org_onebusaway_iphone_Prefix.pch;
@@ -2078,6 +2092,7 @@
 					"$(inherited)",
 					"$(SRCROOT)",
 					"$(PROJECT_DIR)/Libraries/Parse",
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = org_onebusaway_iphone_Prefix.pch;
@@ -2153,6 +2168,7 @@
 					"$(inherited)",
 					"$(SRCROOT)",
 					"$(PROJECT_DIR)/Libraries/Parse",
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = org_onebusaway_iphone_Prefix.pch;
