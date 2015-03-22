@@ -25,9 +25,26 @@
 
 @implementation OBAUserProfileViewController
 
+- (id)init {
+    self = [super initWithNibName:@"OBAUserProfileViewController" bundle:nil];
+    if (self) {
+        self.title = NSLocalizedString(@"Profile", @"");
+        self.tabBarItem.image = [UIImage imageNamed:@"profile"];
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
   
+    CGRect indicatorBounds = CGRectMake(12, 12, 36, 36);
+    
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+        indicatorBounds.origin.y += self.navigationController.navigationBar.frame.size.height +
+        [UIApplication sharedApplication].statusBarFrame.size.height;
+    }
+
+    
   self.badgeCollectionView.delegate = self;
   
   self.view.backgroundColor = OBAGREEN;
