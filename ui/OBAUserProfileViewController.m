@@ -43,7 +43,28 @@
     self.userPicture.layer.borderColor = [[UIColor whiteColor] CGColor];
     self.userPicture.layer.borderWidth = 4;
     self.userPicture.contentMode = UIViewContentModeScaleAspectFill;
-    self.userPicture.image = [UIImage imageNamed:@"juju.jpg"];
+
+    if (user.imageURL) {
+        @weakify(self);
+        NSURLSession *session = [NSURLSession sharedSession];
+        NSURLSessionDataTask *dataTask = [session dataTaskWithURL:[NSURL URLWithString:user.imageURL] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+            @strongify(self);
+
+            if (data.length > 0 && !error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    @strongify(self);
+
+                    UIImage *picture = [UIImage imageWithData:data];
+
+                    if (picture)
+                    {
+                        self.userPicture.image = picture;
+                    }
+                });
+            }
+        }];
+        [dataTask resume];
+    }
 
     self.userName.text = user.displayName ?: NSLocalizedString(@"A OneBusAway User", @"");
 
