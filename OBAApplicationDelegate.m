@@ -225,6 +225,7 @@ static NSString *kOBAShowSurveyAlertKey = @"OBASurveyAlertDefaultsKey";
 
 - (void)initializeParse {
     // Initialize Parse.
+
     [Parse setApplicationId:@"fJs3oUmiiROLCIwRUdR0zpO9YnmGJ8P5frsYStku"
                   clientKey:@"dOL2jSGirOvFHFwS84oJ9BCPhdN0pma8LG9GdPBj"];
 

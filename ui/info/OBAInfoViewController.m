@@ -14,6 +14,8 @@
 #import "OBAAnalytics.h"
 #import "OBAUserProfileViewController.h"
 #import <ParseUI/ParseUI.h>
+#import <FacebookSDK/FacebookSDK.h>
+#import "OBAUser.h"
 
 #define kUserProfileRow 0
 #define kSettingsRow 1
@@ -86,6 +88,14 @@
 
 - (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user {
     [self refreshLoginStatus];
+
+    if (FBSession.activeSession.isOpen) {
+        [self loadFacebookUserData];
+    }
+    else if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
+        [self loadTwitterUserData];
+    }
+
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -95,6 +105,49 @@
 
 - (void)logInViewControllerDidCancelLogIn:(PFLogInViewController *)logInController {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - Handlers for User Info
+
+- (void)loadFacebookUserData {
+
+    OBAUser * currentUser = (OBAUser*)[PFUser currentUser];
+
+    [[FBRequest requestForMe] startWithCompletionHandler:^(FBRequestConnection *connection, NSDictionary<FBGraphUser> *user, NSError *error) {
+        if (!error) {
+            currentUser.imageURL = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&return_ssl_resources=1", user.objectID];
+            currentUser.displayName = user.name;
+            [currentUser saveInBackground];
+        }
+    }];
+}
+
+- (void)loadTwitterUserData {
+    PF_Twitter *twitter = [PFTwitterUtils twitter];
+
+    OBAUser * currentUser = (OBAUser*)[PFUser currentUser];
+    currentUser.displayName = twitter.screenName;
+
+    NSString * requestString = [NSString stringWithFormat:@"https://api.twitter.com/1.1/users/show.json?user_id=%@", twitter.userId];
+    NSURL *verify = [NSURL URLWithString:requestString];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:verify];
+    [[PFTwitterUtils twitter] signRequest:request];
+
+    NSURLSession *session = [NSURLSession sharedSession];
+
+    NSURLSessionDataTask * dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+
+        if (data.length > 0 && !error) {
+            id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+            NSString *url = jsonObject[@"profile_image_url"];
+
+            currentUser.imageURL = [url stringByReplacingOccurrencesOfString:@"_normal" withString:@"_bigger"];
+        }
+
+        [currentUser saveInBackground];
+    }];
+
+    [dataTask resume];
 }
 
 #pragma mark - Actions

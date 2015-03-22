@@ -7,12 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Parse/Parse.h>
 
-@interface OBAUser : NSObject
+@interface OBAUser : PFUser<PFSubclassing>
 
-@property (strong, nonatomic) NSString *userId;
 @property (strong, nonatomic) NSNumber *points;
+@property (strong, nonatomic) NSString *displayName;
+@property (strong, nonatomic) NSString *imageURL;
 
--(void)addUserPoints:(NSNumber*)pointsToAdd;
+- (void)addPoints:(NSInteger)points;
 
 @end
