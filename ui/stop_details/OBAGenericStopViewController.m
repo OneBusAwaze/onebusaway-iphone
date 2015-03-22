@@ -804,17 +804,6 @@ static NSString *kOBASurveyURL = @"http://tinyurl.com/stopinfo";
         cell.selectionStyle = UITableViewCellSelectionStyleGray;
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
       
-        //TODO: Pho - update alert...
-        //      if events == 1 ... !
-        //      if events  > 1 ... !!!
-        NSArray *options = @[@"!",@"", @"", @""];
-        NSUInteger randomIndex = arc4random() % [options count];
-        
-        cell.alertLabel.text = options[randomIndex];
-        
-        //TODO: Pho - warning text
-        NSArray *optionsText = @[@"Alert: Bus is full",@"", @"", @""];
-
         // iOS 7 separator
         if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
             cell.separatorInset = UIEdgeInsetsZero;
@@ -1017,9 +1006,8 @@ static NSString *kOBASurveyURL = @"http://tinyurl.com/stopinfo";
    else if (0 <= indexPath.row && indexPath.row < arrivals.count) {
         OBAArrivalAndDepartureV2 *arrivalAndDeparture = arrivals[indexPath.row];
         OBAArrivalAndDepartureViewController *vc = [[OBAArrivalAndDepartureViewController alloc] initWithApplicationDelegate:_appDelegate arrivalAndDeparture:arrivalAndDeparture];
+        vc.problemReports = _problemReports; // this is dirty :(
         [self.navigationController pushViewController:vc animated:YES];
-  
-
     }
 
 }
