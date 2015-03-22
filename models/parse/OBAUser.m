@@ -10,6 +10,7 @@
 
 @implementation OBAUser
 @dynamic points;
+@dynamic displayName;
 
 + (void)load {
     [self registerSubclass];

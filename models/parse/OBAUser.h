@@ -12,6 +12,8 @@
 @interface OBAUser : PFUser<PFSubclassing>
 
 @property (strong, nonatomic) NSNumber *points;
+@property (strong, nonatomic) NSString *displayName;
+@property (strong, nonatomic) NSString *imageURL;
 
 - (void)addPoints:(NSInteger)points;
 
