@@ -27,7 +27,6 @@
 		0AEE277A1ABEC561008F6FF7 /* OBAUserProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AEE27781ABEC560008F6FF7 /* OBAUserProfileViewController.xib */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
-		1D6671421ABF297C00074518 /* OBAUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D6671411ABF297C00074518 /* OBAUser.m */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765080DF74369002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765070DF74369002DB57D /* CoreGraphics.framework */; };
 		4E03F8C91ABE27420045AEF0 /* OBASubmitReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E03F8C71ABE27420045AEF0 /* OBASubmitReportViewController.m */; };
@@ -97,6 +96,7 @@
 		9342B4301ABE64F000A4C366 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9342B42F1ABE64F000A4C366 /* StoreKit.framework */; };
 		9342B4341ABEA82D00A4C366 /* OBAProblemReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 9342B4331ABEA82D00A4C366 /* OBAProblemReport.m */; };
 		9342B4361ABF5BA900A4C366 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9342B4351ABF5BA900A4C366 /* FacebookSDK.framework */; };
+		9342B4391ABF621300A4C366 /* OBAUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9342B4381ABF621300A4C366 /* OBAUser.m */; };
 		934445F31AB0C22E005B3333 /* EXTScope.m in Sources */ = {isa = PBXBuildFile; fileRef = 934445F11AB0C22E005B3333 /* EXTScope.m */; };
 		934445F61AB0D46E005B3333 /* OBADateHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 934445F51AB0D46E005B3333 /* OBADateHelpers.m */; };
 		934445FA1AB105FB005B3333 /* capitolhill.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 934445F81AB105FB005B3333 /* capitolhill.gpx */; };
@@ -258,8 +258,6 @@
 		0AEE27781ABEC560008F6FF7 /* OBAUserProfileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OBAUserProfileViewController.xib; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D6058910D05DD3D006BFB54 /* OneBusAway.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OneBusAway.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		1D6671401ABF297C00074518 /* OBAUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OBAUser.h; sourceTree = "<group>"; };
-		1D6671411ABF297C00074518 /* OBAUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OBAUser.m; sourceTree = "<group>"; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		288765070DF74369002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		28A0AB4B0D9B1048005BE974 /* org_onebusaway_iphone_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = org_onebusaway_iphone_Prefix.pch; sourceTree = "<group>"; };
@@ -369,6 +367,8 @@
 		9342B4321ABEA82D00A4C366 /* OBAProblemReport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OBAProblemReport.h; sourceTree = "<group>"; };
 		9342B4331ABEA82D00A4C366 /* OBAProblemReport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OBAProblemReport.m; sourceTree = "<group>"; };
 		9342B4351ABF5BA900A4C366 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = Libraries/FacebookSDK.framework; sourceTree = "<group>"; };
+		9342B4371ABF621300A4C366 /* OBAUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OBAUser.h; sourceTree = "<group>"; };
+		9342B4381ABF621300A4C366 /* OBAUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OBAUser.m; sourceTree = "<group>"; };
 		934445F01AB0C22E005B3333 /* EXTScope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXTScope.h; sourceTree = "<group>"; };
 		934445F11AB0C22E005B3333 /* EXTScope.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXTScope.m; sourceTree = "<group>"; };
 		934445F21AB0C22E005B3333 /* metamacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = metamacros.h; sourceTree = "<group>"; };
@@ -949,6 +949,8 @@
 		9342B4311ABEA81D00A4C366 /* parse */ = {
 			isa = PBXGroup;
 			children = (
+				9342B4371ABF621300A4C366 /* OBAUser.h */,
+				9342B4381ABF621300A4C366 /* OBAUser.m */,
 				9342B4321ABEA82D00A4C366 /* OBAProblemReport.h */,
 				9342B4331ABEA82D00A4C366 /* OBAProblemReport.m */,
 			);
@@ -1160,8 +1162,6 @@
 				93AD368F160401EF00BDF03F /* dao */,
 				93AD3663160400F500BDF03F /* unmanaged */,
 				93AD36561603FFE600BDF03F /* annotations */,
-				1D6671401ABF297C00074518 /* OBAUser.h */,
-				1D6671411ABF297C00074518 /* OBAUser.m */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -1630,7 +1630,7 @@
 				934445F31AB0C22E005B3333 /* EXTScope.m in Sources */,
 				934446D11AB12B29005B3333 /* OBAWebViewController.m in Sources */,
 				934446571AB108BF005B3333 /* OBAEntryWithReferencesV2.m in Sources */,
-				1D6671421ABF297C00074518 /* OBAUser.m in Sources */,
+				9342B4391ABF621300A4C366 /* OBAUser.m in Sources */,
 				9344465F1AB108BF005B3333 /* OBARegionBoundsV2.m in Sources */,
 				934446681AB108BF005B3333 /* OBAStopsForRouteV2.m in Sources */,
 				0AEE27791ABEC561008F6FF7 /* OBAUserProfileViewController.m in Sources */,

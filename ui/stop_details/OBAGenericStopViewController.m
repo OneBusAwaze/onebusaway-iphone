@@ -68,8 +68,6 @@ static NSString *kOBASurveyURL = @"http://tinyurl.com/stopinfo";
 
 @property(nonatomic,strong) NSDictionary *problemReports;
 
-@property (strong, nonatomic) OBAUser *user;
-
 @end
 
 @interface OBAGenericStopViewController ()
@@ -129,8 +127,6 @@ static NSString *kOBASurveyURL = @"http://tinyurl.com/stopinfo";
 
         self.navigationItem.title = NSLocalizedString(@"Stop", @"stop");
         self.tableView.backgroundColor = [UIColor whiteColor];
-        
-        self.user = [[OBAUser alloc] init];
 
         [self customSetup];
     }
@@ -810,17 +806,6 @@ static NSString *kOBASurveyURL = @"http://tinyurl.com/stopinfo";
         OBAArrivalEntryTableViewCell *cell = [_arrivalCellFactory createCellForArrivalAndDeparture:pa];
         cell.selectionStyle = UITableViewCellSelectionStyleGray;
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-      
-        //TODO: Pho - update alert...
-        //      if events == 1 ... !
-        //      if events  > 1 ... !!!
-        NSArray *options = @[@"!",@"", @"", @""];
-        NSUInteger randomIndex = arc4random() % [options count];
-        
-        cell.alertLabel.text = options[randomIndex];
-        
-        //TODO: Pho - warning text
-        NSArray *optionsText = @[@"Alert: Bus is full",@"", @"", @""];
 
         // iOS 7 separator
         if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
@@ -867,77 +852,69 @@ static NSString *kOBASurveyURL = @"http://tinyurl.com/stopinfo";
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 
-    if (buttonIndex != alertView.cancelButtonIndex) {
-
-        NSArray *arrivals = [self arrivals];
-
-        if (alertView.tag >= arrivals.count) {
-            return;
-        }
-
-        OBAArrivalAndDepartureV2 *pa = self.arrivals[alertView.tag];
-        OBAProblemReport *problemReport = [OBAProblemReport object];
-        problemReport.tripID = pa.tripId;
-        problemReport.problemReportType = OBAProblemReportTypeFullBus;
-
-        if (pa.stop) {
-            CLLocation *location = [[CLLocation alloc] initWithLatitude:pa.stop.lat longitude:pa.stop.lon];
-            problemReport.location = [PFGeoPoint geoPointWithLocation:location];
-        }
-
-        @weakify(self);
-        [problemReport saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            @strongify(self);
-
-            if (succeeded) {
-                [self.user addUserPoints:[NSNumber numberWithInt:10]];
-
-                switch ([self.user.points integerValue]) {
-                    case 20:
-                        [self createAlertViewForReportSubmissionMilestoneNotification:[NSString stringWithFormat:@"%ld Points", (long)[self.user.points integerValue]]];
-                        break;
-                    case 50:
-                        [self createAlertViewForReportSubmissionMilestoneNotification:[NSString stringWithFormat:@"%ld Points", (long)[self.user.points integerValue]]];
-                        break;
-                    case 100:
-                        [self createAlertViewForReportSubmissionMilestoneNotification:[NSString stringWithFormat:@"%ld Points", (long)[self.user.points integerValue]]];
-                        break;
-                        
-                    default:
-                        [self createAlertViewForReportSubmissionNotification];
-                        break;
-                }
-                                
-                [self reloadData];
-            }
-        }];
+    if (buttonIndex == alertView.cancelButtonIndex) {
+        [self.tableView reloadData];
+        return;
     }
-    
+
+    NSArray *arrivals = [self arrivals];
+
+    if (alertView.tag >= arrivals.count) {
+        return;
+    }
+
+    OBAArrivalAndDepartureV2 *pa = self.arrivals[alertView.tag];
+    OBAProblemReport *problemReport = [OBAProblemReport object];
+    problemReport.tripID = pa.tripId;
+    problemReport.problemReportType = OBAProblemReportTypeFullBus;
+
+    if (pa.stop) {
+        CLLocation *location = [[CLLocation alloc] initWithLatitude:pa.stop.lat longitude:pa.stop.lon];
+        problemReport.location = [PFGeoPoint geoPointWithLocation:location];
+    }
+
+    problemReport.reportedBy = [PFUser currentUser];
+
+    @weakify(self);
+    [problemReport saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        @strongify(self);
+
+        OBAUser *user = (OBAUser*)[PFUser currentUser];
+
+        if (succeeded) {
+            [user addPoints:10];
+            [user saveInBackground];
+
+            NSInteger currentPoints = user.points.integerValue;
+
+            [self displayReportSubmissionAlertForPoints:currentPoints milestoneReached:(currentPoints == 20 || currentPoints == 50 || currentPoints % 100 == 0)];
+
+            [self reloadData];
+        }
+    }];
+
     [self.tableView reloadData];
 }
 
--(void)createAlertViewForReportSubmissionNotification {
-    NSString *alertMessage = NSLocalizedString(@"Thanks for submitting your report", @"");
+-(void)displayReportSubmissionAlertForPoints:(NSInteger)points milestoneReached:(BOOL)milestone {
 
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"+10 points", @"")
-                                                        message:alertMessage
-                                                       delegate:self
-                                              cancelButtonTitle:NSLocalizedString(@"OK", @"Cancel button label")
-                                              otherButtonTitles:nil, nil];
-    [alertView show];
-}
+    NSString *title = nil;
+    NSString *message = NSLocalizedString(@"Thanks for submitting your report", @"");
 
--(void)createAlertViewForReportSubmissionMilestoneNotification:(NSString*)milestone {
-    NSString *alertTitle = [NSString stringWithFormat:NSLocalizedString(@"%@ Milestone Reached",@""), milestone];
-    NSString *alertMessage = NSLocalizedString(@"Thanks for submitting your report", @"");
-    
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:alertTitle
-                                                        message:alertMessage
-                                                       delegate:self
-                                              cancelButtonTitle:NSLocalizedString(@"OK", @"Cancel button label")
-                                              otherButtonTitles:nil, nil];
+    if (milestone) {
+        title = [NSString stringWithFormat:NSLocalizedString(@"%@ Point Milestone Reached!",@""), @(points)];
+    }
+    else {
+        title = NSLocalizedString(@"+10 Points", @"");
+
+    }
+
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
+                                                        message:message
+                                                       delegate:nil
+                                              cancelButtonTitle:NSLocalizedString(@"OK", @"Report submission confirmation cancel button.")
+                                              otherButtonTitles:nil];
     [alertView show];
-    
 }
 
 - (void)determineFilterTypeCellText:(UITableViewCell *)filterTypeCell filteringEnabled:(bool)filteringEnabled {

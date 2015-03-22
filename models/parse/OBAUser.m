@@ -9,10 +9,14 @@
 #import "OBAUser.h"
 
 @implementation OBAUser
+@dynamic points;
 
--(void)addUserPoints:(NSNumber*)pointsToAdd {
-    self.points = [NSNumber numberWithFloat:( [self.points floatValue] + [pointsToAdd floatValue] )];
++ (void)load {
+    [self registerSubclass];
 }
 
+- (void)addPoints:(NSInteger)points {
+    self.points = @(self.points.integerValue + points);
+}
 
 @end
