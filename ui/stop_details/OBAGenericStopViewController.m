@@ -49,7 +49,7 @@ static NSString *kOBAIncreaseContrastKey = @"OBAIncreaseContrastDefaultsKey";
 static NSString *kOBAShowSurveyAlertKey = @"OBASurveyAlertDefaultsKey";
 static NSString *kOBASurveyURL = @"http://tinyurl.com/stopinfo";
 
-@interface OBAGenericStopViewController () <UIAlertViewDelegate>
+@interface OBAGenericStopViewController () <UIActionSheetDelegate>
 @property (strong, readwrite) OBAApplicationDelegate *appDelegate;
 @property (strong, readwrite) NSString *stopId;
 
@@ -817,7 +817,7 @@ static NSString *kOBASurveyURL = @"http://tinyurl.com/stopinfo";
         }
 
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 150, 44)];
-        label.text = NSLocalizedString(@"The Bus is Full!", @"");
+        label.text = NSLocalizedString(@"Report a Problem", @"");
         label.textColor = [UIColor whiteColor];
 
         UIColor *redColor = [UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0];
@@ -826,18 +826,15 @@ static NSString *kOBASurveyURL = @"http://tinyurl.com/stopinfo";
         [cell setSwipeGestureWithView:label color:redColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState3 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
             @strongify(self);
 
-            NSString *alertMessage = [NSString stringWithFormat:NSLocalizedString(@"Help other riders and transit operators in %@ know when buses are full.",@""), self.appDelegate.modelDao.region.regionName];
+            UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"Report a Problem", @"") delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", @"") destructiveButtonTitle:nil otherButtonTitles:nil];
 
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Report that this bus is full", @"")
-                                                                message:alertMessage
-                                                               delegate:self
-                                                      cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel button label")
-                                                      otherButtonTitles:NSLocalizedString(@"Report", @""), nil];
+            actionSheet.tag = indexPath.row; // awful hack, but sufficient for our purposes for now. :P
 
-            alertView.tag = indexPath.row; // awful hack, but sufficient for our purposes for now. :P
+            for (NSInteger i=(OBAProblemReportTypeNone+1); i<OBAProblemReportTypeUnknown; i++) {
+                [actionSheet addButtonWithTitle:[OBAProblemReport stringFromProblemReportType:(OBAProblemReportType)i]];
+            }
 
-            alertView.delegate = self;
-            [alertView show];
+            [actionSheet showFromTabBar:self.tabBarController.tabBar];
         }];
 
         NSArray *problemReportsForTrip = self.problemReports[pa.tripId];
@@ -854,20 +851,32 @@ static NSString *kOBASurveyURL = @"http://tinyurl.com/stopinfo";
     }
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
 
-    if (buttonIndex != alertView.cancelButtonIndex) {
+    if (buttonIndex != actionSheet.cancelButtonIndex) {
+        NSString *buttonTitle = [actionSheet buttonTitleAtIndex:buttonIndex];
+        OBAProblemReportType reportType = OBAProblemReportTypeNone;
+
+        for (NSInteger i=(OBAProblemReportTypeNone+1); i<OBAProblemReportTypeUnknown; i++) {
+
+            OBAProblemReportType possibleReportType = (OBAProblemReportType)i;
+
+            if ([buttonTitle isEqual:[OBAProblemReport stringFromProblemReportType:possibleReportType]]) {
+                reportType = possibleReportType;
+                break;
+            }
+        }
 
         NSArray *arrivals = [self arrivals];
 
-        if (alertView.tag >= arrivals.count) {
+        if (actionSheet.tag >= arrivals.count) {
             return;
         }
 
-        OBAArrivalAndDepartureV2 *pa = self.arrivals[alertView.tag];
+        OBAArrivalAndDepartureV2 *pa = self.arrivals[actionSheet.tag];
         OBAProblemReport *problemReport = [OBAProblemReport object];
         problemReport.tripID = pa.tripId;
-        problemReport.problemReportType = OBAProblemReportTypeFullBus;
+        problemReport.problemReportType = reportType;
 
         if (pa.stop) {
             CLLocation *location = [[CLLocation alloc] initWithLatitude:pa.stop.lat longitude:pa.stop.lon];
@@ -891,15 +900,24 @@ static NSString *kOBASurveyURL = @"http://tinyurl.com/stopinfo";
                     case 100:
                         [self createAlertViewForReportSubmissionMilestoneNotification:[NSString stringWithFormat:@"%ld Points", (long)[self.user.points integerValue]]];
                         break;
-                        
+
                     default:
                         [self createAlertViewForReportSubmissionNotification];
                         break;
                 }
-                                
+
                 [self reloadData];
             }
         }];
+    }
+
+    [self.tableView reloadData];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+
+    if (buttonIndex != alertView.cancelButtonIndex) {
+
     }
     
     [self.tableView reloadData];
