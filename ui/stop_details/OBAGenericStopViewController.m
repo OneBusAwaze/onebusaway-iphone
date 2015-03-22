@@ -887,25 +887,16 @@ static NSString *kOBASurveyURL = @"http://tinyurl.com/stopinfo";
         [problemReport saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             @strongify(self);
 
+            OBAUser *user = (OBAUser*)[PFUser currentUser];
+
             if (succeeded) {
-                [self.user addUserPoints:[NSNumber numberWithInt:10]];
+                [user addPoints:10];
+                [user saveInBackground];
 
-                switch ([self.user.points integerValue]) {
-                    case 20:
-                        [self createAlertViewForReportSubmissionMilestoneNotification:[NSString stringWithFormat:@"%ld Points", (long)[self.user.points integerValue]]];
-                        break;
-                    case 50:
-                        [self createAlertViewForReportSubmissionMilestoneNotification:[NSString stringWithFormat:@"%ld Points", (long)[self.user.points integerValue]]];
-                        break;
-                    case 100:
-                        [self createAlertViewForReportSubmissionMilestoneNotification:[NSString stringWithFormat:@"%ld Points", (long)[self.user.points integerValue]]];
-                        break;
+                NSInteger currentPoints = user.points.integerValue;
 
-                    default:
-                        [self createAlertViewForReportSubmissionNotification];
-                        break;
-                }
-
+                [self displayReportSubmissionAlertForPoints:currentPoints milestoneReached:(currentPoints == 20 || currentPoints == 50 || currentPoints % 100 == 0)];
+                
                 [self reloadData];
             }
         }];
@@ -914,37 +905,23 @@ static NSString *kOBASurveyURL = @"http://tinyurl.com/stopinfo";
     [self.tableView reloadData];
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+-(void)displayReportSubmissionAlertForPoints:(NSInteger)points milestoneReached:(BOOL)milestone {
+    NSString *title = nil;
+    NSString *message = NSLocalizedString(@"Thanks for submitting your report", @"");
 
-    if (buttonIndex != alertView.cancelButtonIndex) {
-
+    if (milestone) {
+        title = [NSString stringWithFormat:NSLocalizedString(@"%@ Point Milestone Reached!",@""), @(points)];
     }
-    
-    [self.tableView reloadData];
-}
+    else {
+        title = NSLocalizedString(@"+10 Points", @"");
+    }
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
+                                                        message:message
+                                                       delegate:nil
+                                              cancelButtonTitle:NSLocalizedString(@"OK", @"Report submission confirmation cancel button.")
+                                              otherButtonTitles:nil];
 
--(void)createAlertViewForReportSubmissionNotification {
-    NSString *alertMessage = NSLocalizedString(@"Thanks for submitting your report", @"");
-
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"+10 points", @"")
-                                                        message:alertMessage
-                                                       delegate:self
-                                              cancelButtonTitle:NSLocalizedString(@"OK", @"Cancel button label")
-                                              otherButtonTitles:nil, nil];
     [alertView show];
-}
-
--(void)createAlertViewForReportSubmissionMilestoneNotification:(NSString*)milestone {
-    NSString *alertTitle = [NSString stringWithFormat:NSLocalizedString(@"%@ Milestone Reached",@""), milestone];
-    NSString *alertMessage = NSLocalizedString(@"Thanks for submitting your report", @"");
-    
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:alertTitle
-                                                        message:alertMessage
-                                                       delegate:self
-                                              cancelButtonTitle:NSLocalizedString(@"OK", @"Cancel button label")
-                                              otherButtonTitles:nil, nil];
-    [alertView show];
-    
 }
 
 - (void)determineFilterTypeCellText:(UITableViewCell *)filterTypeCell filteringEnabled:(bool)filteringEnabled {
