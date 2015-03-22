@@ -1031,9 +1031,8 @@ static NSString *kOBASurveyURL = @"http://tinyurl.com/stopinfo";
    else if (0 <= indexPath.row && indexPath.row < arrivals.count) {
         OBAArrivalAndDepartureV2 *arrivalAndDeparture = arrivals[indexPath.row];
         OBAArrivalAndDepartureViewController *vc = [[OBAArrivalAndDepartureViewController alloc] initWithApplicationDelegate:_appDelegate arrivalAndDeparture:arrivalAndDeparture];
+        vc.problemReports = _problemReports; // this is dirty :(
         [self.navigationController pushViewController:vc animated:YES];
-  
-
     }
 
 }
