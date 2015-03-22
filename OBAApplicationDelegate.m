@@ -25,7 +25,6 @@
 #import "OBARecentStopsViewController.h"
 #import "OBABookmarksViewController.h"
 #import "OBAInfoViewController.h"
-#import "OBAUserProfileViewController.h"
 
 #import "OBASearchController.h"
 #import "OBAStopViewController.h"
@@ -157,11 +156,8 @@ static NSString *kOBAShowSurveyAlertKey = @"OBASurveyAlertDefaultsKey";
     
     self.infoViewController = [[OBAInfoViewController alloc] init];
     self.infoNavigationController = [[UINavigationController alloc] initWithRootViewController:self.infoViewController];
-
-    self.userProfileViewController = [[OBAUserProfileViewController alloc] init];
-    self.userProfileNavigationController = [[UINavigationController alloc] initWithRootViewController:self.userProfileViewController];
     
-    self.tabBarController.viewControllers = @[self.mapNavigationController, self.recentsNavigationController, self.bookmarksNavigationController, self.userProfileNavigationController];
+    self.tabBarController.viewControllers = @[self.mapNavigationController, self.recentsNavigationController, self.bookmarksNavigationController, self.infoNavigationController];
     self.tabBarController.delegate = self;
 
     [self _updateSelectedTabIndex];
@@ -321,8 +317,7 @@ static NSString *kOBAShowSurveyAlertKey = @"OBASurveyAlertDefaultsKey";
             startupView = @"OBABookmarksViewController";
             break;
         case 3:
-//            startupView = @"OBAInfoViewController";
-            startupView = @"OBAUserProfileViewController";
+            startupView = @"OBAInfoViewController";
             break;
         default:
             startupView = @"Unknown";

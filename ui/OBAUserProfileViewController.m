@@ -99,8 +99,8 @@
 
     
     //settings button
-    UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"settings"] style:UIBarButtonItemStylePlain target:self action:@selector(settingsButtonPressed)];
-  self.navigationItem.rightBarButtonItem = settingsButton;
+//    UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"settings"] style:UIBarButtonItemStylePlain target:self action:@selector(settingsButtonPressed)];
+//  self.navigationItem.rightBarButtonItem = settingsButton;
 }
 
 //settings button pressed
