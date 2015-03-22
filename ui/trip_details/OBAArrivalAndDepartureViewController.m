@@ -21,7 +21,6 @@ typedef NS_ENUM(NSInteger, OBASectionType) {
 
 @interface OBAArrivalAndDepartureViewController ()
 
-
 @property (nonatomic, strong) OBAArrivalAndDepartureInstanceRef *instance;
 @property (nonatomic, strong) OBAArrivalAndDepartureV2 *arrivalAndDeparture;
 @property (nonatomic, strong) OBAArrivalEntryTableViewCellFactory *arrivalCellFactory;
@@ -201,12 +200,24 @@ typedef NS_ENUM(NSInteger, OBASectionType) {
 }
 
 - (UITableViewCell *)titleCellForRowAtIndexPath:(NSIndexPath *)indexPath tableView:(UITableView *)tableView {
-    OBAArrivalEntryTableViewCell *cell = [_arrivalCellFactory createCellForArrivalAndDeparture:_arrivalAndDeparture];
+  
+  
+  OBAArrivalEntryTableViewCell *cell = [_arrivalCellFactory createCellForArrivalAndDeparture:_arrivalAndDeparture];
+  cell.accessoryType = UITableViewCellAccessoryNone;
+  cell.selectionStyle = UITableViewCellSelectionStyleNone;
+  //cell.alertLabel.text = @"";
 
-    cell.accessoryType = UITableViewCellAccessoryNone;
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.alertLabel.text = @"";
-    return cell;
+  NSArray *problemReportsForTrip = self.problemReports[_arrivalAndDeparture.tripId];
+
+  if (problemReportsForTrip.count > 0) {
+    OBAProblemReport *firstProblemReport = problemReportsForTrip[0];
+    cell.problemReportType = firstProblemReport.problemReportType;
+    cell.numberOfReports = problemReportsForTrip.count;
+  }
+  else {
+    cell.problemReportType = OBAProblemReportTypeNone;
+  }
+  return cell;
 }
 
 - (UITableViewCell *)serviceAlertsCellForRowAtIndexPath:(NSIndexPath *)indexPath tableView:(UITableView *)tableView {
