@@ -79,6 +79,7 @@
 
                     if (picture) {
                         self.userPicture.image = picture;
+                        self.cameraButton.hidden = YES;
                     }
                 });
             }
