@@ -28,6 +28,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>onebusaway</string>
+				<string>fb618638138269404</string>
 			</array>
 		</dict>
 	</array>
@@ -59,5 +60,9 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>FacebookAppID</key>
+	<string>618638138269404</string>
+	<key>FacebookDisplayName</key>
+	<string>OneBusAwaze</string>
 </dict>
 </plist>

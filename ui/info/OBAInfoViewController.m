@@ -13,6 +13,7 @@
 #import "OBACreditsViewController.h"
 #import "OBAAnalytics.h"
 #import "OBAUserProfileViewController.h"
+#import <ParseUI/ParseUI.h>
 
 #define kUserProfileRow 0
 #define kSettingsRow 1
@@ -23,6 +24,10 @@
 #define kPrivacy 6
 
 #define kRowCount 7
+
+@interface OBAInfoViewController () <PFLogInViewControllerDelegate>
+
+@end
 
 @implementation OBAInfoViewController
 
@@ -44,13 +49,55 @@
     self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.tableHeaderView = self.headerView;
     self.tableView.frame = self.view.bounds;
-    
+
+    [self refreshLoginStatus];
+
     [OBAAnalytics reportScreenView:[NSString stringWithFormat:@"View: %@", [self class]]];
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
+#pragma mark - Parse Login/Logout
+
+- (void)refreshLoginStatus {
+    if ([PFUser currentUser]) {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Log Out", @"") style:UIBarButtonItemStyleBordered target:self action:@selector(logout)];
+    }
+    else {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Log In", @"") style:UIBarButtonItemStyleBordered target:self action:@selector(loginOrSignup)];
+    }
 }
+
+- (void)logout {
+    [PFUser logOut];
+
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Log In", @"") style:UIBarButtonItemStyleBordered target:self action:@selector(loginOrSignup)];
+}
+
+- (void)loginOrSignup {
+    //Parse setup
+    PFLogInViewController *loginController = [[PFLogInViewController alloc] init];
+    loginController.delegate = self;
+    loginController.fields = (PFLogInFieldsUsernameAndPassword | PFLogInFieldsLogInButton | PFLogInFieldsSignUpButton | PFLogInFieldsPasswordForgotten | PFLogInFieldsDismissButton | PFLogInFieldsFacebook | PFLogInFieldsTwitter);
+    loginController.facebookPermissions = @[@"friends_about_me"];
+
+    [self presentViewController:loginController animated:YES completion:nil];
+}
+
+#pragma mark - PFLogInViewControllerDelegate
+
+- (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user {
+    [self refreshLoginStatus];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)logInViewController:(PFLogInViewController *)logInController didFailToLogInWithError:(PFUI_NULLABLE NSError *)error {
+    //
+}
+
+- (void)logInViewControllerDidCancelLogIn:(PFLogInViewController *)logInController {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - Actions
 
 - (void) openContactUs {
     UIViewController *pushMe = nil;
