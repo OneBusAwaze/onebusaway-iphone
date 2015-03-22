@@ -16,6 +16,7 @@
 
 #import <SystemConfiguration/SystemConfiguration.h>
 #import <Parse/Parse.h>
+#import <ParseFacebookUtils/PFFacebookUtils.h>
 #import "OBAApplicationDelegate.h"
 #import "OBANavigationTargetAware.h"
 #import "OBALogger.h"
@@ -227,6 +228,7 @@ static NSString *kOBAShowSurveyAlertKey = @"OBASurveyAlertDefaultsKey";
     [Parse setApplicationId:@"fJs3oUmiiROLCIwRUdR0zpO9YnmGJ8P5frsYStku"
                   clientKey:@"dOL2jSGirOvFHFwS84oJ9BCPhdN0pma8LG9GdPBj"];
 
+    [PFFacebookUtils initializeFacebook];
     [PFTwitterUtils initializeWithConsumerKey:@"q2dKhWpwuSl6EyhUY5Qc9kLbE" consumerSecret:@"3NQcxyrHTRraydPtvvCEqIqrpfOi62JT3QkcVQ2kkRJloWzkxF"];
 }
 
@@ -242,11 +244,22 @@ static NSString *kOBAShowSurveyAlertKey = @"OBASurveyAlertDefaultsKey";
     [self applicationDidEnterBackground:application]; // call for iOS < 4.0 devices
 }
 
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation {
+    return [FBAppCall handleOpenURL:url
+                  sourceApplication:sourceApplication
+                        withSession:[PFFacebookUtils session]];
+}
+
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     self.active = YES;
     self.tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:kOBASelectedTabIndexDefaultsKey];
     [GAI sharedInstance].optOut =
     ![[NSUserDefaults standardUserDefaults] boolForKey:kAllowTracking];
+
+    [FBAppCall handleDidBecomeActiveWithSession:[PFFacebookUtils session]];
 
     if([self.modelDao.readCustomApiUrl isEqualToString:@""]) {
         [OBAAnalytics reportEventWithCategory:@"app_settings" action:@"configured_region" label:[NSString stringWithFormat:@"API Region: %@",self.modelDao.region.regionName] value:nil];
