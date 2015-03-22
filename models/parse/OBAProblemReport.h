@@ -11,6 +11,9 @@
 typedef NS_ENUM(NSInteger, OBAProblemReportType) {
     OBAProblemReportTypeNone = 0,
     OBAProblemReportTypeFullBus = 1,
+    OBAProblemReportTypeAccident = 2,
+    OBAProblemReportTypeDisabledBus = 3,
+    OBAProblemReportTypeMissingBus = 4,
     OBAProblemReportTypeUnknown //Make sure this is always the *last* item in the list
 };
 
@@ -21,4 +24,6 @@ typedef NS_ENUM(NSInteger, OBAProblemReportType) {
 @property(nonatomic,strong) NSString *comments;
 @property(nonatomic,assign) OBAProblemReportType problemReportType;
 @property(nonatomic,strong) PFUser *reportedBy;
+
++ (NSString*)stringFromProblemReportType:(OBAProblemReportType)problemReportType;
 @end

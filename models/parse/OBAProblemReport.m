@@ -16,6 +16,29 @@
 @dynamic comments;
 @dynamic reportedBy;
 
+#pragma mark - Public Class Methods
+
++ (NSString*)stringFromProblemReportType:(OBAProblemReportType)problemReportType {
+    switch (problemReportType) {
+        case OBAProblemReportTypeNone:
+            return NSLocalizedString(@"No Problem", @"");
+        case OBAProblemReportTypeFullBus:
+            return NSLocalizedString(@"Bus is Full", @"");
+        case OBAProblemReportTypeAccident:
+            return NSLocalizedString(@"Bus in Accident", @"");
+        case OBAProblemReportTypeDisabledBus:
+            return NSLocalizedString(@"Bus is Disabled", @"");
+        case OBAProblemReportTypeMissingBus:
+            return NSLocalizedString(@"Bus is Missing", @"");
+        case OBAProblemReportTypeUnknown:
+        default:
+            return NSLocalizedString(@"Unknown Problem", @"");
+            break;
+    }
+}
+
+#pragma mark - Parse
+
 + (void)load {
     [self registerSubclass];
 }

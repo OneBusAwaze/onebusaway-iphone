@@ -49,7 +49,7 @@ static NSString *kOBAIncreaseContrastKey = @"OBAIncreaseContrastDefaultsKey";
 static NSString *kOBAShowSurveyAlertKey = @"OBASurveyAlertDefaultsKey";
 static NSString *kOBASurveyURL = @"http://tinyurl.com/stopinfo";
 
-@interface OBAGenericStopViewController () <UIAlertViewDelegate>
+@interface OBAGenericStopViewController () <UIActionSheetDelegate>
 @property (strong, readwrite) OBAApplicationDelegate *appDelegate;
 @property (strong, readwrite) NSString *stopId;
 
@@ -67,6 +67,8 @@ static NSString *kOBASurveyURL = @"http://tinyurl.com/stopinfo";
 @property (nonatomic, assign) BOOL showSurveyAlert;
 
 @property(nonatomic,strong) NSDictionary *problemReports;
+
+@property (strong, nonatomic) OBAUser *user;
 
 @end
 
@@ -127,6 +129,8 @@ static NSString *kOBASurveyURL = @"http://tinyurl.com/stopinfo";
 
         self.navigationItem.title = NSLocalizedString(@"Stop", @"stop");
         self.tableView.backgroundColor = [UIColor whiteColor];
+        
+        self.user = [[OBAUser alloc] init];
 
         [self customSetup];
     }
@@ -806,14 +810,14 @@ static NSString *kOBASurveyURL = @"http://tinyurl.com/stopinfo";
         OBAArrivalEntryTableViewCell *cell = [_arrivalCellFactory createCellForArrivalAndDeparture:pa];
         cell.selectionStyle = UITableViewCellSelectionStyleGray;
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-
+      
         // iOS 7 separator
         if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
             cell.separatorInset = UIEdgeInsetsZero;
         }
 
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 150, 44)];
-        label.text = NSLocalizedString(@"The Bus is Full!", @"");
+        label.text = NSLocalizedString(@"Report a Problem", @"");
         label.textColor = [UIColor whiteColor];
 
         UIColor *redColor = [UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0];
@@ -822,18 +826,15 @@ static NSString *kOBASurveyURL = @"http://tinyurl.com/stopinfo";
         [cell setSwipeGestureWithView:label color:redColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState3 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
             @strongify(self);
 
-            NSString *alertMessage = [NSString stringWithFormat:NSLocalizedString(@"Help other riders and transit operators in %@ know when buses are full.",@""), self.appDelegate.modelDao.region.regionName];
+            UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"Report a Problem", @"") delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", @"") destructiveButtonTitle:nil otherButtonTitles:nil];
 
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Report that this bus is full", @"")
-                                                                message:alertMessage
-                                                               delegate:self
-                                                      cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel button label")
-                                                      otherButtonTitles:NSLocalizedString(@"Report", @""), nil];
+            actionSheet.tag = indexPath.row; // awful hack, but sufficient for our purposes for now. :P
 
-            alertView.tag = indexPath.row; // awful hack, but sufficient for our purposes for now. :P
+            for (NSInteger i=(OBAProblemReportTypeNone+1); i<OBAProblemReportTypeUnknown; i++) {
+                [actionSheet addButtonWithTitle:[OBAProblemReport stringFromProblemReportType:(OBAProblemReportType)i]];
+            }
 
-            alertView.delegate = self;
-            [alertView show];
+            [actionSheet showFromTabBar:self.tabBarController.tabBar];
         }];
 
         NSArray *problemReportsForTrip = self.problemReports[pa.tripId];
@@ -850,54 +851,61 @@ static NSString *kOBASurveyURL = @"http://tinyurl.com/stopinfo";
     }
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
 
-    if (buttonIndex == alertView.cancelButtonIndex) {
-        [self.tableView reloadData];
-        return;
-    }
+    if (buttonIndex != actionSheet.cancelButtonIndex) {
+        NSString *buttonTitle = [actionSheet buttonTitleAtIndex:buttonIndex];
+        OBAProblemReportType reportType = OBAProblemReportTypeNone;
 
-    NSArray *arrivals = [self arrivals];
+        for (NSInteger i=(OBAProblemReportTypeNone+1); i<OBAProblemReportTypeUnknown; i++) {
 
-    if (alertView.tag >= arrivals.count) {
-        return;
-    }
+            OBAProblemReportType possibleReportType = (OBAProblemReportType)i;
 
-    OBAArrivalAndDepartureV2 *pa = self.arrivals[alertView.tag];
-    OBAProblemReport *problemReport = [OBAProblemReport object];
-    problemReport.tripID = pa.tripId;
-    problemReport.problemReportType = OBAProblemReportTypeFullBus;
-
-    if (pa.stop) {
-        CLLocation *location = [[CLLocation alloc] initWithLatitude:pa.stop.lat longitude:pa.stop.lon];
-        problemReport.location = [PFGeoPoint geoPointWithLocation:location];
-    }
-
-    problemReport.reportedBy = [PFUser currentUser];
-
-    @weakify(self);
-    [problemReport saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        @strongify(self);
-
-        OBAUser *user = (OBAUser*)[PFUser currentUser];
-
-        if (succeeded) {
-            [user addPoints:10];
-            [user saveInBackground];
-
-            NSInteger currentPoints = user.points.integerValue;
-
-            [self displayReportSubmissionAlertForPoints:currentPoints milestoneReached:(currentPoints == 20 || currentPoints == 50 || currentPoints % 100 == 0)];
-
-            [self reloadData];
+            if ([buttonTitle isEqual:[OBAProblemReport stringFromProblemReportType:possibleReportType]]) {
+                reportType = possibleReportType;
+                break;
+            }
         }
-    }];
+
+        NSArray *arrivals = [self arrivals];
+
+        if (actionSheet.tag >= arrivals.count) {
+            return;
+        }
+
+        OBAArrivalAndDepartureV2 *pa = self.arrivals[actionSheet.tag];
+        OBAProblemReport *problemReport = [OBAProblemReport object];
+        problemReport.tripID = pa.tripId;
+        problemReport.problemReportType = reportType;
+
+        if (pa.stop) {
+            CLLocation *location = [[CLLocation alloc] initWithLatitude:pa.stop.lat longitude:pa.stop.lon];
+            problemReport.location = [PFGeoPoint geoPointWithLocation:location];
+        }
+
+        @weakify(self);
+        [problemReport saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            @strongify(self);
+
+            OBAUser *user = (OBAUser*)[PFUser currentUser];
+
+            if (succeeded) {
+                [user addPoints:10];
+                [user saveInBackground];
+
+                NSInteger currentPoints = user.points.integerValue;
+
+                [self displayReportSubmissionAlertForPoints:currentPoints milestoneReached:(currentPoints == 20 || currentPoints == 50 || currentPoints % 100 == 0)];
+                
+                [self reloadData];
+            }
+        }];
+    }
 
     [self.tableView reloadData];
 }
 
 -(void)displayReportSubmissionAlertForPoints:(NSInteger)points milestoneReached:(BOOL)milestone {
-
     NSString *title = nil;
     NSString *message = NSLocalizedString(@"Thanks for submitting your report", @"");
 
@@ -906,14 +914,13 @@ static NSString *kOBASurveyURL = @"http://tinyurl.com/stopinfo";
     }
     else {
         title = NSLocalizedString(@"+10 Points", @"");
-
     }
-
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
                                                         message:message
                                                        delegate:nil
                                               cancelButtonTitle:NSLocalizedString(@"OK", @"Report submission confirmation cancel button.")
                                               otherButtonTitles:nil];
+
     [alertView show];
 }
 

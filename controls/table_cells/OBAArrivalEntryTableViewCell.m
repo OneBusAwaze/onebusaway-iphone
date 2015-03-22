@@ -92,7 +92,8 @@
 }
 
 - (void)buildAlertTextLabel {
-    self.alertTextLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Bus Reported to Be Full (%@ report%@)", @""), @(self.numberOfReports), self.numberOfReports == 1 ? @"" : @"s"];
+    NSString *problemType = [OBAProblemReport stringFromProblemReportType:self.problemReportType];
+    self.alertTextLabel.text = [NSString stringWithFormat:NSLocalizedString(@"%@ (%@ report%@)", @""), problemType, @(self.numberOfReports), self.numberOfReports == 1 ? @"" : @"s"];
 }
 
 - (void) setAlertStyle:(OBAArrivalEntryTableViewCellAlertStyle)alertStyle {
