@@ -7,6 +7,7 @@
 //
 
 #import "OBAUserProfileViewController.h"
+#import "OBASettingsViewController.h"
 #import "OBAUser.h"
 
 @interface OBAUserProfileViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource>
@@ -34,6 +35,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+  
+    CGRect indicatorBounds = CGRectMake(12, 12, 36, 36);
+    
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+        indicatorBounds.origin.y += self.navigationController.navigationBar.frame.size.height +
+        [UIApplication sharedApplication].statusBarFrame.size.height;
+    }
 
     OBAUser *user = (OBAUser*)[PFUser currentUser];
 
@@ -51,9 +59,12 @@
     self.userPicture.layer.cornerRadius = 50;
     self.userPicture.layer.masksToBounds = true;
     self.userPicture.layer.borderColor = [[UIColor whiteColor] CGColor];
+    self.userPicture.backgroundColor = [UIColor whiteColor];
     self.userPicture.layer.borderWidth = 4;
     self.userPicture.contentMode = UIViewContentModeScaleAspectFill;
 
+    [self.cameraButton addTarget:self action:@selector(cameraButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    
     if (user.imageURL) {
         @weakify(self);
         NSURLSession *session = [NSURLSession sharedSession];
@@ -66,9 +77,12 @@
 
                     UIImage *picture = [UIImage imageWithData:data];
 
-                    if (picture)
-                    {
+                    if (picture) {
+                        
                         self.userPicture.image = picture;
+                    }
+                    else {
+//                        self.userPicture.image = //camera
                     }
                 });
             }
@@ -87,10 +101,10 @@
     self.picture2.layer.cornerRadius = 25;
     self.picture2.layer.masksToBounds = true;
 
-
-    //Camera button
-    UIBarButtonItem *cameraButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(cameraButtonPressed)];
-    self.navigationItem.rightBarButtonItem = cameraButton;
+    
+    //settings button
+    UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"settings"] style:UIBarButtonItemStylePlain target:self action:@selector(settingsButtonPressed)];
+  self.navigationItem.rightBarButtonItem = settingsButton;
 }
 
 //settings button pressed
