@@ -299,13 +299,13 @@ static NSString *kOBAIncreaseContrastKey = @"OBAIncreaseContrastDefaultsKey";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    //Parse setup
-    PFLogInViewController *loginController = [[PFLogInViewController alloc] init];
-    loginController.delegate = self;
-    loginController.fields = (PFLogInFieldsUsernameAndPassword | PFLogInFieldsLogInButton | PFLogInFieldsSignUpButton | PFLogInFieldsPasswordForgotten | PFLogInFieldsDismissButton | PFLogInFieldsFacebook | PFLogInFieldsTwitter);
-    loginController.facebookPermissions = @[@"friends_about_me"];
-    
-    [self presentViewController:loginController animated:true completion:nil];
+//    //Parse setup
+//    PFLogInViewController *loginController = [[PFLogInViewController alloc] init];
+//    loginController.delegate = self;
+//    loginController.fields = (PFLogInFieldsUsernameAndPassword | PFLogInFieldsLogInButton | PFLogInFieldsSignUpButton | PFLogInFieldsPasswordForgotten | PFLogInFieldsDismissButton | PFLogInFieldsFacebook | PFLogInFieldsTwitter);
+//    loginController.facebookPermissions = @[@"friends_about_me"];
+//    
+//    [self presentViewController:loginController animated:true completion:nil];
 
     OBALocationManager *lm = self.appDelegate.locationManager;
     [lm addDelegate:self];
