@@ -11,6 +11,7 @@
 @implementation OBAUser
 @dynamic points;
 @dynamic displayName;
+@dynamic imageURL;
 
 + (void)load {
     [self registerSubclass];

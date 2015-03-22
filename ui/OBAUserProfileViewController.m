@@ -68,6 +68,8 @@
 
     self.userName.text = user.displayName ?: NSLocalizedString(@"A OneBusAway User", @"");
 
+    self.userPoints.text = [NSString stringWithFormat:@"%@ Points", @(user.points.integerValue)];
+
     //THIS WILL BE DELETED AND REPLACED WITH COLLECTION VIEW
     self.picture1.layer.cornerRadius = 25;
     self.picture1.layer.masksToBounds = true;
