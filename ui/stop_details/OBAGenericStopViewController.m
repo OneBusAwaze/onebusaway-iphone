@@ -909,7 +909,7 @@ static NSString *kOBASurveyURL = @"http://tinyurl.com/stopinfo";
     NSString *title = nil;
     NSString *message = NSLocalizedString(@"Thanks for submitting your report", @"");
 
-    if (milestone) {
+    if (milestone && points > 0) {
         title = [NSString stringWithFormat:NSLocalizedString(@"%@ Point Milestone Reached!",@""), @(points)];
     }
     else {
